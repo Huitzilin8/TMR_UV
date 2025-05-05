@@ -49,13 +49,13 @@ def hilo_lidar_wrapper(stop_event, data_queue, lidar_port='COM3'):
              lidar_ctrl.stop()
         print(f"[{thread_name}] Terminado.")
 
-def hilo_carriles_wrapper(stop_event, data_queue, camera_index=0, target_size=(640, 480)):
+def hilo_carriles_wrapper(stop_event, data_queue, target_size=(640, 480)):
     """Punto de entrada para el hilo de detección de carriles."""
     thread_name = threading.current_thread().name
     print(f"[{thread_name}] Iniciando...")
     try:
         # Llama a la función principal del módulo de carriles
-        run_deteccion_carriles(stop_event, data_queue, camera_index, target_size)
+        run_deteccion_carriles(stop_event, data_queue, target_size)
     except Exception as e:
         print(f"[{thread_name}] Error crítico: {e}")
     finally:
@@ -68,17 +68,7 @@ if __name__ == "__main__":
 
     # --- Parámetros ---
     LIDAR_PORT = 'COM3' # Puerto LIDAR
-    CAMERA_INDEX_SIGNALS = 0 # Índice cámara para señales/semáforos
-    CAMERA_INDEX_LANES = 0   # Índice cámara para carriles
     TARGET_FRAME_SIZE = (640, 480) # Tamaño al que se procesarán los frames de carril
-
-    # ---> ¡IMPORTANTE! Chequeo de Índice de Cámara <---
-    if CAMERA_INDEX_SIGNALS == CAMERA_INDEX_LANES:
-        print("[Principal] ADVERTENCIA: ¡La misma cámara está asignada a Señalamientos y Carriles!")
-        print("Esto causará conflictos. Debes usar cámaras diferentes o refactorizar para")
-        print("tener un solo hilo de captura que distribuya los frames.")
-        # Podrías decidir salir o continuar bajo tu propio riesgo
-        # sys.exit(1)
 
     # --- Crear los Hilos ---
     hilo_senalamientos = threading.Thread(
@@ -95,7 +85,7 @@ if __name__ == "__main__":
 
     hilo_carriles = threading.Thread(
         target=hilo_carriles_wrapper,
-        args=(stop_event, datos_sensores_queue, CAMERA_INDEX_LANES, TARGET_FRAME_SIZE),
+        args=(stop_event, datos_sensores_queue, TARGET_FRAME_SIZE),
         name="Sensor-Carriles",
         daemon=True)
 
