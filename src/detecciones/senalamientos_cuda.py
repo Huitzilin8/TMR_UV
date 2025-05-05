@@ -44,11 +44,6 @@ color_luz = {
     "Apagado": (128, 128, 128),
     "Indeterminado": (255, 0, 0),
 }
-
-cap = cv2.VideoCapture(0)
-if not cap.isOpened():
-    print("Error: No se pudo abrir la cámara web.")
-    exit()
     
 def run_deteccion(stop_event, data_queue: queue.Queue):
     data = []
@@ -116,6 +111,5 @@ def run_deteccion(stop_event, data_queue: queue.Queue):
             break
 
     # --- Limpiar ---
-    cap.release()
     cv2.destroyAllWindows()
 
