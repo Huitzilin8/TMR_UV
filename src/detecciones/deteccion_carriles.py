@@ -131,7 +131,7 @@ def run_deteccion_carriles(stop_event, data_queue, target_size=(640, 480)):
     Captura frames, los procesa y envía los resultados a la cola compartida.
     """
     thread_name = threading.current_thread().name
-    print(f"[{thread_name}] Iniciando. Cámara índice: {camera_index}, Tamaño destino: {target_size}")
+    print(f"[{thread_name}] Iniciando. Tamaño destino: {target_size}")
 
     # Parámetros de procesamiento
     resized_width, resized_height = target_size
