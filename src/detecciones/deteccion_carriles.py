@@ -125,18 +125,13 @@ def get_lane_centers(binary_roi, roi_start_row_in_resized, nwindows=10, margin=5
 
 
 # --- Función Principal para el Hilo de Detección de Carriles ---
-def run_deteccion_carriles(stop_event, data_queue, camera_index=0, target_size=(640, 480)):
+def run_deteccion_carriles(stop_event, data_queue, target_size=(640, 480)):
     """
     Función principal que se ejecuta en el hilo de detección de carriles.
     Captura frames, los procesa y envía los resultados a la cola compartida.
     """
     thread_name = threading.current_thread().name
     print(f"[{thread_name}] Iniciando. Cámara índice: {camera_index}, Tamaño destino: {target_size}")
-
-    cap = cv2.VideoCapture(camera_index)
-    if not cap.isOpened():
-        print(f"[{thread_name}] Error crítico: No se pudo abrir la cámara {camera_index}.")
-        return # Terminar el hilo si no hay cámara
 
     # Parámetros de procesamiento
     resized_width, resized_height = target_size
